@@ -1,0 +1,52 @@
+---
+title: "scatter plot priors"
+author: "Kornel Kiełczewski"
+date: "25 April 2016"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+```
+
+
+```{r}
+results50 <- data.frame()
+
+for (p in seq(0.1, 0.9, 0.1)) {
+  a <- read.csv(paste0('out50/type_a_', p, '.temt'), sep = '\t', col.names = c('transcript_ID', 'estimated_counts_a', 'RPKM_a'))
+  b <- read.csv(paste0('out50/type_b_', p, '.temt'), sep = '\t', col.names = c('transcript_ID', 'estimated_counts_b', 'RPKM_b'))
+  joined <- a %>% inner_join(b, by = c('transcript_ID' = 'transcript_ID'))
+  joined$total <- joined$estimated_counts_a + joined$estimated_counts_a
+  joined$prop_a <- joined$estimated_counts_a / joined$total
+  joined$prop_b <- joined$estimated_counts_b / joined$total
+  temp <- data.frame(prop_a = joined$prop_a, prop_b = joined$prop_b)
+  results50 <- rbind(results50, temp)
+}
+
+plot(density(results50$prop_a))
+axis(1, at = seq(0, 1, 0.1))
+plot(density(results50$prop_b))
+axis(1, at = seq(0, 1, 0.1))
+```
+
+
+```{r}
+results90 <- data.frame()
+
+for (p in seq(0.1, 0.9, 0.1)) {
+  a <- read.csv(paste0('out90/type_a_', p, '.temt'), sep = '\t', col.names = c('transcript_ID', 'estimated_counts_a', 'RPKM_a'))
+  b <- read.csv(paste0('out90/type_b_', p, '.temt'), sep = '\t', col.names = c('transcript_ID', 'estimated_counts_b', 'RPKM_b'))
+  joined <- a %>% inner_join(b, by = c('transcript_ID' = 'transcript_ID'))
+  joined$total <- joined$estimated_counts_a + joined$estimated_counts_a
+  joined$prop_a <- joined$estimated_counts_a / joined$total
+  joined$prop_b <- joined$estimated_counts_b / joined$total
+  temp <- data.frame(prop_a = joined$prop_a, prop_b = joined$prop_b)
+  results90 <- rbind(results90, temp)
+}
+
+plot(density(results90$prop_a))
+axis(1, at = seq(0, 1, 0.1))
+plot(density(results90$prop_b))
+axis(1, at = seq(0, 1, 0.1))
+```

@@ -1,0 +1,35 @@
+---
+title: "test prior"
+author: "Kornel Kiełczewski"
+date: "25 April 2016"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+a <- read.csv('out50/type_a_0.1.temt', sep = '\t', col.names = c('transcript_ID', 'estimated_counts_a', 'RPKM_a'))
+b <- read.csv('out50/type_b_0.1.temt', sep = '\t', col.names = c('transcript_ID', 'estimated_counts_b', 'RPKM_b'))
+
+```
+
+Join
+
+```{r}
+joined <- a %>% inner_join(b, by = c('transcript_ID' = 'transcript_ID'))
+
+joined$total <- joined$estimated_counts_a + joined$estimated_counts_a
+joined$prop_a <- joined$estimated_counts_a / joined$total
+joined$prop_b <- joined$estimated_counts_b / joined$total
+```
+
+Density a:
+
+```{r}
+plot(density(joined$prop_a))
+```
+
+Density b:
+
+```{r}
+plot(density(joined$prop_b))
+```
