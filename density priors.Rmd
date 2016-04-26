@@ -17,14 +17,19 @@ for (p in seq(0.1, 0.9, 0.1)) {
   a <- read.csv(paste0('out50/type_a_', p, '.temt'), sep = '\t', col.names = c('transcript_ID', 'estimated_counts_a', 'RPKM_a'))
   b <- read.csv(paste0('out50/type_b_', p, '.temt'), sep = '\t', col.names = c('transcript_ID', 'estimated_counts_b', 'RPKM_b'))
   joined <- a %>% inner_join(b, by = c('transcript_ID' = 'transcript_ID'))
-  joined$total <- joined$estimated_counts_a + joined$estimated_counts_a
+  joined$total <- joined$estimated_counts_a + joined$estimated_counts_b
   joined$prop_a <- joined$estimated_counts_a / joined$total
   joined$prop_b <- joined$estimated_counts_b / joined$total
-  temp <- data.frame(prop_a = joined$prop_a, prop_b = joined$prop_b)
+  temp <- data.frame(prop_a = joined$prop_a, prop_b = joined$prop_b, p = p, k = 1:14)
   results50 <- rbind(results50, temp)
 }
 
+library(ggplot2)
+
+ggplot(results50) + geom_line(aes(p, prop_a, color = as.factor(k)))
+
 plot(density(results50$prop_a))
+hist(results50$prop_a)
 axis(1, at = seq(0, 1, 0.1))
 plot(density(results50$prop_b))
 axis(1, at = seq(0, 1, 0.1))
@@ -38,12 +43,15 @@ for (p in seq(0.1, 0.9, 0.1)) {
   a <- read.csv(paste0('out90/type_a_', p, '.temt'), sep = '\t', col.names = c('transcript_ID', 'estimated_counts_a', 'RPKM_a'))
   b <- read.csv(paste0('out90/type_b_', p, '.temt'), sep = '\t', col.names = c('transcript_ID', 'estimated_counts_b', 'RPKM_b'))
   joined <- a %>% inner_join(b, by = c('transcript_ID' = 'transcript_ID'))
-  joined$total <- joined$estimated_counts_a + joined$estimated_counts_a
+  joined$total <- joined$estimated_counts_a + joined$estimated_counts_b
   joined$prop_a <- joined$estimated_counts_a / joined$total
   joined$prop_b <- joined$estimated_counts_b / joined$total
-  temp <- data.frame(prop_a = joined$prop_a, prop_b = joined$prop_b)
+  temp <- data.frame(prop_a = joined$prop_a, prop_b = joined$prop_b, p = p, k = 1:14)
   results90 <- rbind(results90, temp)
 }
+
+ggplot(results50) + geom_line(aes(p, prop_a, color = as.factor(k)))
+
 
 plot(density(results90$prop_a))
 axis(1, at = seq(0, 1, 0.1))
