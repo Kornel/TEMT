@@ -1,21 +1,36 @@
----
-title: "scatter plot priors"
-author: "Kornel Kiełczewski"
-date: "25 April 2016"
-output: 
-  html_document: 
-    keep_md: yes
----
+# scatter plot priors
+Kornel Kiełczewski  
+25 April 2016  
 
-```{r}
+
+```r
 library(dplyr)
+```
 
+```
+## 
+## Attaching package: 'dplyr'
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
 real.mix <- read.csv('real-counts.tsv', sep = '\t')
-
 ```
 
 
-```{r}
+
+```r
 results50 <- data.frame()
 
 for (p in seq(0.1, 0.9, 0.1)) {
@@ -30,8 +45,11 @@ library(ggplot2)
 ggplot(results50) + geom_line(aes(p, estimated_counts_b - X50, color = transcript_ID))
 ```
 
+![](density_priors_files/figure-html/unnamed-chunk-2-1.png)
 
-```{r}
+
+
+```r
 results90 <- data.frame()
 
 for (p in seq(0.1, 0.9, 0.1)) {
@@ -46,3 +64,5 @@ library(ggplot2)
 
 ggplot(results90) + geom_line(aes(p, estimated_counts_b - X90, color = transcript_ID))
 ```
+
+![](density_priors_files/figure-html/unnamed-chunk-3-1.png)
